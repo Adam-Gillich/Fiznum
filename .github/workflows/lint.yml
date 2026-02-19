@@ -1,0 +1,29 @@
+name: Lint Python Submissions
+
+on:
+  push:
+    paths:
+      - 'submissions/**/*.py'
+  pull_request:
+    paths:
+      - 'submissions/**/*.py'
+
+jobs:
+  lint:
+    name: flake8
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install flake8
+        run: pip install flake8
+
+      - name: Lint submissions
+        run: flake8 submissions/ --max-line-length=120
