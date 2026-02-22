@@ -15,7 +15,7 @@ class EulerIntegrator:
 
     def __init__(self, dt, N, r0=(1, 0), v0=(0, 1)):
         """
-        It defines all the values used class vise, and creates all the data lists.
+        It defines all the values used class-wise, and creates all the data lists.
         :param dt: Delta t, time.
         :param N: Number of iterations
         :param r0: The initial position
@@ -77,7 +77,7 @@ class EulerIntegrator:
         :param vy: y component of v
         :param ax: x component of a
         :param ay: y component of a
-        :return: The recalculated values.
+        :return: The recalculated values of velocity and position.
         """
 
         # Calc r, first
@@ -99,7 +99,7 @@ class EulerIntegrator:
         :param vy: y component of v
         :param ax: x component of a
         :param ay: y component of a
-        :return: The recalculated values.
+        :return: The recalculated values of velocity and position.
         """
 
         # Calc v, first
@@ -115,7 +115,7 @@ class EulerIntegrator:
     def Core_Calculations(self, mode: bool):
         """
         This function does the core calculations.
-        :param mode: Selected mode
+        :param mode: Selected mode, True for 'std', False for 'flp'
         """
 
         t, x, y, vx, vy, ax, ay = EulerIntegrator.SetInitVars(self)
@@ -145,7 +145,7 @@ class EulerIntegrator:
     def main(self, mode: str):
         """
         The 'main' function initiates the calculations, by matching the 'mode' to a valid output.
-        :param mode: Selected mode
+        :param mode: Selected mode, 'str' for standard mode, 'flp' for flip mode.
         """
 
         match mode:
@@ -159,7 +159,7 @@ class EulerIntegrator:
 
 def euler_integrator(dt, N, mode: str = 'std'):
     """
-    Calls the 'EulerIntegrator' class. Redundant, but required.
+    Calls the 'EulerIntegrator' class. The function is only a wrapper for the class in this solution of the task.
     :param dt: Delta t, time
     :param N: Number of iterations
     :param mode: Selected mode
@@ -215,7 +215,6 @@ def plot(dt, mode, size=(8, 8)):
     :param dt: Delta t, time
     :param mode: Selected mode
     :param size: Size of the figure
-    :return:
     """
 
     SetTex()

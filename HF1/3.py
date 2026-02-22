@@ -10,14 +10,13 @@ pi = np.pi
 # -----------------------------------------------------------
 
 
-def MakeLine(axis, begin, end, **attributes):
+def MakeLine(axis, begin: tuple, end: tuple, **attributes):
     """
     Makes a line between two points.
     :param axis: Current axis.
     :param begin: Beginning point
     :param end: End point.
     :param attributes: Extra attributes for 'axis.plot()'.
-    :return: Plots a line.
     """
 
     x = np.array([begin[0], end[0]])
@@ -30,9 +29,9 @@ def MakeCircleToXY(radius, phi, center=(0, 0)):
     """
     Converts the coordinates of a point of a circle to x and y values.
     :param radius: Radius of the circle.
-    :param phi: Phase angle of the circle.
+    :param phi: Phase angle of the circle, in degrees.
     :param center: Center of the circle.
-    :return: Coordinates in a tuple.
+    :return: The converted coordinates in a tuple.
     """
 
     xc, yc = center
@@ -51,12 +50,11 @@ def MakeProgressArc(axis, radius, begin, end, n, color, center=(0, 0)):
     Makes the required curve with the color progressing points.
     :param axis: Current axis.
     :param radius: Radius of the circle.
-    :param begin: Beginning angle.
-    :param end: Ending angle.
-    :param n: Number of points.
+    :param begin: Beginning angle, in degrees.
+    :param end: Ending angle, in degrees.
+    :param n: Number of evenly spaced points.
     :param color: Color of the line below the points.
     :param center: Center of the circle.
-    :return: Plots the points and line.
     """
 
     xc, yc = center
@@ -93,11 +91,10 @@ def MakeArcArrow(axis, radius, begin, end, color, center=(0, 0)):
     Makes the required arrow arcs.
     :param axis: Current axis.
     :param radius: Radius of the circle.
-    :param begin: Beginning angle.
-    :param end: Ending angle.
+    :param begin: Beginning angle, in degrees.
+    :param end: Ending angle, in degrees.
     :param color: Color of the line and arrow.
     :param center: Center of the circle.
-    :return: Plots the required arrow arc.
     """
 
     xc, yc = center
@@ -122,7 +119,7 @@ def MakeArcArrow(axis, radius, begin, end, color, center=(0, 0)):
         head_width=head_width,
         head_length=2.5 * head_width,
         length_includes_head=False,
-        edgecolor=color, facecolor=color, fill=True
+        edgecolor=color, facecolor=color, fill=True, overhang=0.2
     )
 
 # -----------------------------------------------------------
@@ -135,11 +132,10 @@ def axintMakeArcArrow(axis, radius, begin, end, color, center=(0, 0)):
     Makes the required arrow arc for the intermediate subplot.
     :param axis: Current axis.
     :param radius: Radius of the circle.
-    :param begin: Beginning angle.
-    :param end: Ending angle.
+    :param begin: Beginning angle, in degrees.
+    :param end: Ending angle, in degrees.
     :param color: Color of the line and arrow.
     :param center: Center of the circle.
-    :return: Plots the required arrow arc.
     """
 
     xc, yc = center
@@ -164,7 +160,7 @@ def axintMakeArcArrow(axis, radius, begin, end, color, center=(0, 0)):
         head_width=head_width,
         head_length=2.5 * head_width,
         length_includes_head=False,
-        edgecolor=color, facecolor=color, fill=True
+        edgecolor=color, facecolor=color, fill=True, overhang=0.2
     )
 
 
@@ -174,14 +170,14 @@ def axintMakeArcArrow(axis, radius, begin, end, color, center=(0, 0)):
 def initials(axis):
     """
     This function creates the common elements between the plots.
+    Removes anything unneeded, sets the axis lines, sets the LaTeX fonts, and labels the origin.
     :param axis: Chosen axis to plot on.
-    :return: Bunch of stuff to plot.
     """
 
     axis.set_aspect('equal')
     plt.gcf().set_size_inches(10, 5 - 1.12)
 
-    # Remove everything, basically.
+    # Remove everything, unnecessary.
     axis.spines['top'].set_visible(False)
     axis.spines['bottom'].set_visible(False)
     axis.spines['left'].set_visible(False)
@@ -219,7 +215,6 @@ def initials(axis):
 def texts():
     """
     Plots all the texts of all the plots.
-    :return: Text plots.
     """
 
     # Axis 1 texts
@@ -254,8 +249,7 @@ def texts():
 
 def axis1():
     """
-    This plots everything for 'ax1'.
-    :return: Plots various things.
+    This plots everything for 'ax1'. The patches, then initials, and the arcs and arrows.
     """
 
     # Patches
@@ -270,8 +264,7 @@ def axis1():
 
 def axis2():
     """
-    This plots everything for 'ax2'.
-    :return: Plots various things.
+    This plots everything for 'ax2'. The patches, then initials, and the arcs and arrows.
     """
 
     # Patches
@@ -293,8 +286,9 @@ def axis2():
 
 def axis_int():
     """
-    This plots everything for 'axint'.
-    :return: Plots various things.
+    This plots everything for 'axint'. Which is much less than the two other axes,
+    thus removing everything unnecessary explicitly here, without a dedicated function.
+    And creating the one arrow that is needed here.
     """
 
     axint.set_aspect('equal')
@@ -316,7 +310,7 @@ def axis_int():
 def plot():
     """
     The main plot function. Ultimately this creates the image.
-    :return: Plots.
+    It combines all axis functions and the 'texts()' function.
     """
 
     axis1()

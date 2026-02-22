@@ -10,8 +10,8 @@ def TruePolynom(num_coeffs, den_coeffs, z):
     Creates F = P/Q.
     :param num_coeffs: P coefficients
     :param den_coeffs: Q coefficients
-    :param z: A complex number
-    :return: F
+    :param z: A complex number, or a numpy array.
+    :return: F = P/Q, so, the divided two polynoms, with np.inf at the poles.
     """
 
     P = poly(num_coeffs, z)
@@ -27,7 +27,7 @@ def TruePolynom(num_coeffs, den_coeffs, z):
 def poly(coeffs: list, z):
     """
     This creates and calculates the value of a polynom.
-    :param coeffs: Coefficients of the polynom.
+    :param coeffs: Coefficients of the polynom arranged into a list.
     :param z: A number. Could be an array.
     :return: One number, or array, that's the result of the polynom.
     """
@@ -93,7 +93,8 @@ def initials(axis, xlim, ylim, xlabel, ylabel, title, lcolor):
 
 def axis1(fig, axisI, xlim, ylim, Fz, X, Y):
     """
-    Creates everything of 'ax1'.
+    Creates everything of 'ax1'. Starting with the initials, then calculating the absolute values of F(z),
+    then applying logarithmic scaling for the plot.
     :param fig: Main fig
     :param axisI: 'ax1'
     :param xlim: Limit of x-axis
@@ -118,7 +119,8 @@ def axis1(fig, axisI, xlim, ylim, Fz, X, Y):
 
 def axis2(fig, axisII, xlim, ylim, Fz, X, Y):
     """
-    Creates everything of 'ax2'.
+    Creates everything of 'ax2'. Starting with the initials, then calculating the phase angle of F(z), and using the
+    cyclic colormap 'twilight' to plot the values.
     :param fig: Main fig
     :param axisII: 'ax2'
     :param xlim: Limit of x-axis
@@ -142,9 +144,9 @@ def axis2(fig, axisII, xlim, ylim, Fz, X, Y):
 
 def plot_complex_rational(num_coeffs, den_coeffs, xlim=(-10, 10), ylim=(-10, 10), n=200):
     """
-    Main plotting function, Plots everything.
+    Main plotting function, plots everything.
     :param num_coeffs: Coefficients of numerator (P)
-    :param den_coeffs:Coefficients of denominator (Q)
+    :param den_coeffs: Coefficients of denominator (Q)
     :param xlim: Limit of x-axis
     :param ylim: Limit of y-axis
     :param n: Number of sample points

@@ -5,7 +5,7 @@ def szam_osszeg(m):
     """
     This function creates a sum of a whole number's digits.
     :param m: Given whole number.
-    :return: The sum m's digits.
+    :return: The sum of m's digits.
     """
 
     # Make to str
@@ -20,9 +20,9 @@ def szam_osszeg(m):
 
 def szam_gyok(n):
     """
-    Repeates 'szam_osszeg(m)' function, recursively, until the returned value is one digit long.
+    Repeats 'szam_osszeg(m)' function, recursively, until the returned value is one digit long.
     :param n: Given whole number.
-    :return: Return a one digit whole number.
+    :return: A one digit whole number.
     """
 
     k = szam_osszeg(n)
@@ -36,9 +36,9 @@ def szam_gyok(n):
 
 def oszthato(p):
     """
-    Checks if the given whole 'p' is divisible by the sum of its digits.
+    Checks if the given whole number 'p' is divisible by the sum of its digits.
     :param p: Given whole number.
-    :return: boolean
+    :return: True if p is divisible by its digit sum, False otherwise.
     """
 
     if p == 0:
@@ -55,9 +55,9 @@ def oszthato(p):
 
 def values_of_y(N):
     """
-    This function creates the values of y.
+    Computes the running ratio P/i for each i in [1, N).
     :param N: End of range.
-    :return: Values of y.
+    :return: Values of y, each item containing the 'P/i', ratio.
     """
 
     P = 0
@@ -72,7 +72,6 @@ def values_of_y(N):
 def plot():
     """
     Plots the graph of 'P/N' as a function of 'N'.
-    :return: The graph.
     """
 
     N = 1e5
@@ -93,9 +92,9 @@ def plot():
 
 def num_div_by_digit_list(N):
     """
-    Creates a list of numbers divisible by the sum of their digits, up to 'N'.
+    Creates a list of numbers divisible by the sum of their digits, up to 'N', for the histogram.
     :param N: Maximum range.
-    :return: List of  integers.
+    :return: List of integers, divisible by the sum of their digits.
     """
 
     nums = []
@@ -107,9 +106,9 @@ def num_div_by_digit_list(N):
 
 def create_data(nums):
     """
-    This function applies 'szam_gyok(n)' to all of 'nums' elements.
+    This function applies 'szam_gyok(n)' to all of 'nums' elements, creating the digital roots of the numbers.
     :param nums: List of numbers.
-    :return: List of numbers.
+    :return: List of one digit integers.
     """
     data = []
     for i in nums:
@@ -120,7 +119,6 @@ def create_data(nums):
 def plot_hist():
     """
     Plots a histogram of numbers affected by 'szam_gyok(n)'.
-    :return: The histogram.
     """
 
     N = 1e5
