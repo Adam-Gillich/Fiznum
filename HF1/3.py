@@ -59,29 +59,70 @@ def MakeProgressArc(axis, radius, begin, end, n, color, center=(0, 0)):
 
     xc, yc = center
 
-    # Make Arc     ------------------------------------
+    # Make Arc     ----------------------------------------------------------------------------------------
+
+    # A linspace úgy működik, hogy megadsz neki két számot, hol kezdjen és hol végezzen.
+    # Mivel én fokkal kezdtem el dolgozni ezért azt át kell alakítani rad-ba.
+    # A harmadik paraméter '100', azt mondja meg hogy ezt az intervallumot hány részre ossza a linspace
     phi = np.linspace(np.deg2rad(begin),
                       np.deg2rad(end), 100)
 
+    # De ez így kevés, hiszen ez még nem koordináta, csak egy szám
+    # Ezért átalakítjuk a sugarat és szöget felhasználva a polár koordinátákat, x és y koordinátákká 
+    # xc és yc a center x és y koordinátája, ami alapértelmezetten (ha meghívásnál egyérelműen nem adod meg, hogy
+    # például center=(2, 4), akkor automatikusan mindkettő xc, és yc is 0 lesz.)
     x = xc + radius * np.cos(phi)
     y = yc + radius * np.sin(phi)
 
+    # Majd ezt plotoljuk.
+    # (a color-t a függvény meghívásánál adjuk meg)
     axis.plot(x, y, color=color, linewidth=1)
 
-    # Make Points ------------------------------------
+    # Make Points ----------------------------------------------------------------------------------------
+
+    # Oké most van egy kötívünk, de nincs rajta pont
+    # Fontos, hogy a pontokat az ív után plotoljuk, mert úgy kerül a tetejáre
+    #
+    # A linspace ugyanúgy működik, de itt at n a pontok száma
+    # Tehát ha  n = 19 (mert tényleg annyi ponunk lesz), amit a függvény meghívásánál adunk meg
+    # akkor a linspace-t 19 pontra fogja osztani 
     points = np.linspace(np.deg2rad(begin),
                          np.deg2rad(end), n)
 
+
+    # És természetesen ezt is át kell alakítani x és y koordinátává
     xp = xc + radius * np.cos(points)
     yp = yc + radius * np.sin(points)
 
     # Color Map
+
+    # Na de, hogy is legyen ez mind beszínezve?
+    # A matplolib-nek (fontos, mert nem a matplolib.pyplot-nak)
+    # Van egy ilyen függvénye, ami alul látható
+    # A 'white_blue' a colotmap nevét definiálja (nem feltétlen szükséges, de most nemtudom hirtelen biztosra)
+    # A második ['white', 'midnightblue'] pedig a range-et mondja meg
+    # Tehát 'white'-tól, 'midnightblue'-ig menjen a colormap
+    
+    # Ezt el is nevezzük cmap-nak, mint colormap
     cmap = mpl.colors.LinearSegmentedColormap.from_list('white_blue',
                                                         ['white', 'midnightblue'])
 
+    # És most jön a varázslat
+    # A cmap, csak 0 és 1 közt tud színt rendelni egy pontunkhoz
+    # Ezért az i-edik színt 0 és 1 közé kell beszorítani
+    # Egy for ciklussal végig megyünk 0-tól 1-ig az icolorral, majd plotoljuk azt a pontot icolor színnel
     for i in range(n):
+        # A pythonban az indexelés 0-tól indul és n-1-el végződik
+        # Magyarul ha n= 19 akkor 19 pontod lesz de az intervallum 0-18-ig megy
+        # ezért hogy 0-1 közt legyünk leosztunk (n-1)-el
+        # pl.: 0/18, 1/18, 2/18, 3/18 . . . 18/18 
         icolor = i / (n - 1)
 
+        # És kiplotoljuk a ponot minden alkalommal
+        # Ehhez kell a pontok x és y koordinátájának (xp, és yp) i-edik eleme
+        # És az 'o' modja meg hogy pontok legyenek
+        # A színt pedig a markerfacecolor-nak ekll beadni
+        # Ami természetesen a colormap-nek (cmap) az i-edik színe lesz (icolor)
         axis.plot(xp[i], yp[i], 'o', markersize=4, markeredgewidth=0.8,
                   markerfacecolor=cmap(icolor), markeredgecolor=color)
 
