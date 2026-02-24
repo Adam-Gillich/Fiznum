@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import ipywidgets as wid
+#import ipywidgets as wid
 
 
 def myinv(A):
@@ -83,12 +83,12 @@ def Connect(coords, N, lcolor):
     """
     n = 2 * N + 1
 
-    def draw_if_vertical(k):
+    def draw_if_not_boundary(k):
         if k % n != n - 1:
             plt.plot([coords[k][0], coords[k+1][0]],
                      [coords[k][1], coords[k+1][1]], '-', color=lcolor)
 
-    list(map(draw_if_vertical, range(len(coords))))
+    list(map(draw_if_not_boundary, range(len(coords))))
 
 
 # ---------------------------------
@@ -103,19 +103,66 @@ def gen_mvec(phi):
     G1 = 2 * np.pi * np.array([1, 0])
     G2 = 2 * np.pi * np.array([0, 1])
 
-    g1 = G1 - G1 @ rot(phi).T
-    g2 = G2 - G2 @ rot(phi).T
+    g1 = G1 - G1 @ rot(-phi).T
+    g2 = G2 - G2 @ rot(-phi).T
 
     M = 2 * np.pi * myinv(
         np.array([[g1[0], g1[1]],
                   [g2[0], g2[1]]])
     )
-    return M
+
+    V1 = np.array([M[0, 0], M[1, 0]])
+    V2 = np.array([M[0, 1], M[1, 1]])
+
+    return V1, V2
 
 
 # --------------------------------
+# Plot functions
+# --------------------------------
 
-def plot(N, phi, lines=True):
+def MakeGrids(phi, N, lines: bool):
+    """
+    This function creates the initial, and rotated grid.
+    :param phi: Degree by which the grid is turned.
+    :param N: Size parameter.
+    :param lines: A mode parameter, if True, the resulting plot will have lines. Otherwise, points.
+    """
+
+    stockgrid = gen_grid(0, N)
+    rotgrid = gen_grid(phi, N)
+
+    # Check mode
+    if lines:
+        Connect(rotgrid, N, lcolor='red')
+        Connect(stockgrid, N, lcolor='blue')
+    else:
+        plt.plot(rotgrid[:, 0], rotgrid[:, 1], 'ro', label='Rotated grid', zorder=2)
+        plt.plot(stockgrid[:, 0], stockgrid[:, 1], 'bo', label='Original grid', zorder=1)
+
+
+def MakeMoire(phi, moireN=2):
+    """
+    This function creates the moiré vectors and grid.
+    :param phi: Degree by which the grids (not moiré) is turned.
+    :param moireN: Moiré size parameter.
+    """
+
+    V1, V2 = gen_mvec(phi)
+    mM = np.array([V1, V2])
+
+    moiregrid = TrueGenGrid(mM, -moireN, moireN+1, -moireN, -moireN, [])
+
+    # Plot vectors
+    origin = np.array([[0, 0], [0, 0]])
+    plt.quiver(*origin, mM[:, 0], mM[:, 1], color=['k', 'k'], scale=30, label='Moiré vectors', zorder=4)
+
+    plt.plot(moiregrid[:, 0], moiregrid[:, 1], 'o',
+             markerfacecolor='yellow', markeredgecolor='black',
+             label='Moiré grid', zorder=3)
+
+
+def plot(N, phi, lines=False):
     """
     This function plots the graph of the grids and vectors.
     :param N: Size parameter.
@@ -125,33 +172,21 @@ def plot(N, phi, lines=True):
 
     fig, ax = plt.subplots()
 
-    # Set plot
+    # Plot initials
     ax.set_aspect('equal')
-    fig.set_size_inches(5, 5)
+    fig.set_size_inches(7, 5)
 
-    # Make grids
-    stockgrid = gen_grid(0, N)
-    rotgrid = gen_grid(phi, N)
+    MakeGrids(phi, N, lines)
 
-    # Make vectors
-    M = gen_mvec(phi)
-    mV = np.array([[M[0][0], M[1][0]], [M[0][1], M[1][1]]])
-    origin = np.array([[0, 0], [0, 0]])
-    plt.quiver(*origin, M[:, 0], M[:, 1], color=['k', 'k'], scale=50)
+    MakeMoire(phi)
 
-    # Check mode
-    if lines:
-        Connect(rotgrid, N, lcolor='red')
-        Connect(stockgrid, N, lcolor='blue')
-    else:
-        plt.plot(rotgrid[:, 0], rotgrid[:, 1], 'ro')
-        plt.plot(stockgrid[:, 0], stockgrid[:, 1], 'bo')
-
+    plt.legend(draggable=True, bbox_to_anchor=(1, 1), loc='upper left')
+    plt.tight_layout()
     plt.show()
 
 
 if __name__ == "__main__":
 
-    plot(3, np.pi/24)
+    plot(13, 0.2, lines=False)
 
     # wid.interact(plot, N=(1, 6, 1), phi=(0.01, np.pi/6, 0.0025))
