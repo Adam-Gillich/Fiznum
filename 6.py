@@ -11,7 +11,6 @@ class Graf19:
         """
         Initiates the class, by setting up the requested starting state, and creating the class variables.
         """
-        # Initializes the class, by setting the requested initial state and creating the class variables.
         self.A = []
         self.coords = []
         self.coords_dict = {}
@@ -109,48 +108,6 @@ class Graf19:
         self.A[4][1] = 0
 
     # ------------------------------------------------
-    # Execute during plot
-    # ------------------------------------------------
-
-    def CheckRed(self):
-        """
-        This function checks which points ought to be turned red. The condition is having exactly three connections.
-        :return: The coordinates of the points to be marked red, and their indexes.
-        """
-
-        connections = 0
-        markred = []
-        indexes = []
-
-        for i in self.TheBig7():
-            for n in self.A[int(i)]:
-                connections += n
-
-            if connections == 3:
-                markred.append(self.TheBig7()[i])
-                indexes.append(str(i))
-                connections = 0
-            else:
-                connections = 0
-
-        return np.array(markred), indexes
-
-    def Connect(self, axis):
-        """
-        This function connects the points according to the Adjacency Matrix.
-        :param axis: Current axis
-        """
-
-        n = len(self.coords)
-
-        for i in range(n):
-            for j in range(i + 1, n):
-                if self.A[i][j] == 1:
-                    x = [self.coords[i][0], self.coords[j][0]]
-                    y = [self.coords[i][1], self.coords[j][1]]
-                    axis.plot(x, y, 'k')
-
-    # ------------------------------------------------
     # Helpers
     # ------------------------------------------------
 
@@ -203,7 +160,7 @@ class Graf19:
                 self.A[int(index)][int(i)] = 1
                 self.A[int(i)][int(index)] = 1
 
-    def CheckConnect(self, index):
+    def ThreeConnection(self, index):
         """
         Checks whether a given point of "TheBig7" has exactly three connections, hence it is flippable.
         :param index: Given index of a point.
@@ -221,27 +178,50 @@ class Graf19:
             return False
 
     # ------------------------------------------------
-    # Execute outside
+    # Plot functions
     # ------------------------------------------------
 
-    def megfordit(self, csucs_index: str):
+    # --------------------
+    # Execute during plot
+    # --------------------
+
+    def CheckRed(self):
         """
-        This function checks whether a point satisfies the conditions to be flipped, then calls the 'Flip' function.
-        :param csucs_index: Given index of a point.
-        :return: Flip the connections if everything is satisfied. If the given point isn't part of "TheBig7" then a 'str', and if the given point of "TheBig7" doesn't have three connections, then nothing.
+        This function checks which points ought to be turned red. The condition is having exactly three connections.
+        :return: The coordinates of the points to be marked red, and their indexes, for the title of the plots.
         """
 
-        if csucs_index in self.TheBig7().keys():
-            if self.CheckConnect(csucs_index):
-                self.Flip(csucs_index)
+        connections = 0
+        markred = []
+        indexes = []
+
+        for i in self.TheBig7():
+            for n in self.A[int(i)]:
+                connections += n
+
+            if connections == 3:
+                markred.append(self.TheBig7()[i])
+                indexes.append(str(i))
+                connections = 0
             else:
-                pass
-        else:
-            return "Nem belső csúcsot adtál meg, ezért nem csinálok semmit!"
+                connections = 0
 
-    # --------------------
-    # Plot functions
-    # --------------------
+        return np.array(markred), indexes
+
+    def Connect(self, axis):
+        """
+        This function connects the points according to the Adjacency Matrix.
+        :param axis: Current axis
+        """
+
+        n = len(self.coords)
+
+        for i in range(n):
+            for j in range(i + 1, n):
+                if self.A[i][j] == 1:
+                    x = [self.coords[i][0], self.coords[j][0]]
+                    y = [self.coords[i][1], self.coords[j][1]]
+                    axis.plot(x, y, 'k')
 
     @staticmethod
     def initials(axis):
@@ -258,6 +238,25 @@ class Graf19:
         axis.spines['right'].set_visible(False)
         axis.set_xticks([])
         axis.set_yticks([])
+
+    # ------------------------------------------------
+    # Execute outside
+    # ------------------------------------------------
+
+    def megfordit(self, csucs_index: str):
+        """
+        This function checks whether a point satisfies the conditions to be flipped, then calls the 'Flip' function.
+        :param csucs_index: Given index of a point.
+        :return: Flip the connections if everything is satisfied. If the given point isn't part of "TheBig7" then a 'str', and if the given point of "TheBig7" doesn't have three connections, then nothing.
+        """
+
+        if csucs_index in self.TheBig7().keys():
+            if self.ThreeConnection(csucs_index):
+                self.Flip(csucs_index)
+            else:
+                pass
+        else:
+            return "Nem belső csúcsot adtál meg, ezért nem csinálok semmit!"
 
     def rajzol(self, axis):
         """
