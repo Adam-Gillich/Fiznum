@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 import h5py
-import cmocean  # Prettier cmaps
+import cmocean  # Prettier cmaps, not on Jupyter, must be replaced with a stock one
 import datetime as dt
 
 # ----------------------------------
