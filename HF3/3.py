@@ -290,7 +290,7 @@ def plot_mediterranean_precipitation(lon, lat, precipitation, coastline):
     vmax = np.nanmax(precipitation)
 
     pre = plt.scatter(lon, lat, c=precipitation,
-                      cmap=cmocean.cm.rain, vmin=0.0, vmax=vmax,
+                      cmap=cmocean.cm.rain, vmin=0.0, vmax=vmax,  # add cmap='YlGnBu'
                       s=16, linewidths=0, marker='s', alpha=0.7)
 
     cbar = plt.colorbar(pre, pad=0.01, shrink=0.9)
@@ -356,7 +356,7 @@ class Plot:
         vmax = np.nanmax(self.medi_data[:, 2])
 
         pre = plt.scatter(self.medi_data[:, 0], self.medi_data[:, 1], c=self.medi_data[:, 2],
-                          cmap=cmocean.cm.rain, vmin=0.0, vmax=vmax,
+                          cmap=cmocean.cm.rain, vmin=0.0, vmax=vmax,  # add cmap='YlGnBu'
                           s=16, linewidths=0, marker='s', alpha=0.7)
 
         cbar = plt.colorbar(pre, pad=0.01, shrink=0.9)
