@@ -16,6 +16,13 @@ file = 'CNTs.data.npy'
 
 
 def get_orientation_and_tilt(r0) -> tuple:
+    """
+    This function calculates the orientation 
+    and tilt of one nanotube. As requested.
+    :param r0: Absolute position of the nanotube.
+    :return: orientation, and tilt
+    """
+
     tube = r0
 
     r_n = PositionToCenter(tube)
@@ -58,9 +65,11 @@ def SetTex():
 
 def read_npy(filename: str) -> list:
     """
-
+    This function reads the binary numpy file.
+    And structures the data into separate nanotubes,
+    where each element of a nanotube is one point in 3D space.
     :param filename: File location
-    :return:
+    :return: data of the 50 nanotubes
     """
 
     raw_data = np.load(filename, allow_pickle=False)
@@ -79,16 +88,30 @@ def read_npy(filename: str) -> list:
 
 
 def CenterMass(tube) -> np.ndarray:
+    """
+    :param tube: Accepts one nanotube.
+    :return: Returns its center mass position.
+    """
     return np.mean(tube, axis=0)
 
 
 def PositionToCenter(tube) -> np.ndarray:
+    """
+    :param tube: Accepts one nanotube.
+    :return: Returns the positions of the tube relative to the center mass.
+    """
+
     R = CenterMass(tube)
     r_n = tube - R
     return r_n
 
 
 def MomentOfInertia(tube) -> np.ndarray:
+    """
+    :param tube: Accepts one nanotube.
+    :return: Returns its moment of inertia.
+    """
+
     r_dot_r = np.einsum('ni,ni->n', tube, tube)
 
     left = np.sum(r_dot_r) * np.eye(3)
@@ -109,6 +132,7 @@ def ShiftToZero(tube) -> np.ndarray:
 
 
 class Plot:
+    """This class does the plotting."""
 
     def __init__(self, tubes):
         self.tubes = tubes
@@ -116,6 +140,10 @@ class Plot:
         SetTex()
 
     def xy_xz_yz(self, annotate=False):
+        """
+        This function plots all 50 nanotubes from different angles.
+        :param annotate: If True all the nanotubes will be numbered.
+        """
 
         fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(16, 6))
 
@@ -155,6 +183,17 @@ class Plot:
         plt.show()
 
     def three_tubes(self, chosen_nanotubes: list, Limited=False, lim: int = None):
+        """
+        This function, accepts a list of nanotubes.
+        Shifts them to (0, 0, 0), with different
+        colors, and plots their vectors on them in
+        black, to show their direction.
+        :param chosen_nanotubes: List of nanotubes
+        :param Limited: If True the plot can be limited.
+                        Doesn't work without 'lim'.
+        :param lim: A number that determines the new limits of the plot all around.
+                    The function will still run with 'Limited' being False.
+        """
 
         fig, ax = plt.subplots(1, 1, figsize=(7, 7))
 
@@ -196,6 +235,11 @@ class Plot:
         plt.show()
 
     def tilt_vs_index(self):
+        """
+        This function plots all the tilts of
+        the nanotubes and, their mean, represented
+        by the horizontal red line.
+        """
 
         plt.figure(figsize=(8, 6))
 
