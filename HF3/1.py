@@ -45,8 +45,8 @@ class Counter(dict):
 # File locations
 # ----------------------------------
 
-file1 = "mediterranean_coastline_lonlat.txt"
-file2 = "earthquakes_mediterranean_2024.csv"
+file1 = "/v/courses/2026-afizikanumerikusmdszerei12026.public/data/mediterranean_coastline_lonlat.txt"
+file2 = "/v/courses/2026-afizikanumerikusmdszerei12026.public/data/earthquakes_mediterranean_2024.csv"
 
 # ----------------------------------
 # Requested functions

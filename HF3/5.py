@@ -7,7 +7,7 @@ import pickle
 # File location
 # ----------------------------------
 
-ecg_file = 'ecg.pkl'
+ecg_file = '/v/courses/2026-afizikanumerikusmdszerei12026.public/data/ecg.pkl'
 
 # ----------------------------------
 # Helper functions

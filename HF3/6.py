@@ -8,7 +8,7 @@ import cmocean
 # File location
 # ----------------------------------
 
-wav_file = 'wav3.wav'
+wav_file = '/v/courses/2026-afizikanumerikusmdszerei12026.public/data/wav3.wav'
 
 
 # ----------------------------------

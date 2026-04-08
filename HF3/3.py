@@ -9,8 +9,8 @@ import datetime as dt
 # File location
 # ----------------------------------
 
-file1 = 'nasa_data.HDF5'
-file2 = 'mediterranean_coastline_lonlat.txt'
+file1 = '/v/courses/2026-afizikanumerikusmdszerei12026.public/data/nasa_data.HDF5'
+file2 = '/v/courses/2026-afizikanumerikusmdszerei12026.public/data/mediterranean_coastline_lonlat.txt'
 
 
 # ----------------------------------

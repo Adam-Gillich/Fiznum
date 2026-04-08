@@ -7,7 +7,7 @@ import scipy
 # File location
 # ----------------------------------
 
-file = 'CNTs.data.npy'
+file = '/v/courses/2026-afizikanumerikusmdszerei12026.public/data/CNTs.data.npy'
 
 
 # ----------------------------------

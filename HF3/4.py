@@ -10,7 +10,7 @@ import matplotlib.patches as mplpat
 # File location
 # ----------------------------------
 
-directory = r'exo_data'
+directory = r'/v/courses/2026-afizikanumerikusmdszerei12026.public/data/exo_data'
 
 # ----------------------------------
 # Helper functions
