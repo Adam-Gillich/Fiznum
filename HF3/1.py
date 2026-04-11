@@ -152,23 +152,45 @@ def SetTex():
     mpl.rcParams['font.serif'] = 'cm'
 
 
-def PlaceOfMostEQs(earthquakes: list[dict]):
+def PlaceOfMostEQs(earthquakes: list[dict], mode='cc'):
     """
     This function calculates the most common place, where earthquakes happen.
+    Recently added feature is that with the 'mode' parameter.
+    Multiple options can be chosen, depending on what the
+    definition of "place" is.
+    :param mode: Default 'cc', for city + country, other modes include 'e', for exact, 'c', for city and 'co', for country.
     :param earthquakes: Data from earthquakes file
     :return: Tuple of name, occurrence, and list of indexes of the most common place
     """
+    Warn_user = False
 
-    def condition(eq):
-        return eq['place'].split(' ')[4] + ' ' + eq['place'].split(' ')[5]
+    def better_condition(eq):
+        match mode:
+            case 'e':  # For exact
+                return eq['place']
+            case 'c':  # For city
+                return eq['place'].split(' ')[4].strip(',')
+            case 'co':  # For country
+                return ' '.join(eq['place'].split(' ')[5:])
+            case 'cc':  # For city + country
+                return ' '.join([eq['place'].split(' ')[4]] + eq['place'].split(' ')[5:])
+            case _:  # Default back to city + country, and warning message
+                nonlocal Warn_user
+                Warn_user = True
+                return ' '.join([eq['place'].split(' ')[4]] + eq['place'].split(' ')[5:])
 
-    data = Counter(condition(eq) for eq in earthquakes)
+    data = Counter(better_condition(eq) for eq in earthquakes)
     name, occurrence = data.most_common(1)[0]
+
+    if Warn_user:
+        import warnings
+        warnings.warn("Invalid mode detected, defaulted back to 'cc', city + country.\n"
+                      "    Valid modes: 'e', 'c', 'co', 'cc'")
 
     index = []
 
     for i, eq in enumerate(earthquakes):
-        if condition(eq) == name:
+        if better_condition(eq) == name:
             index.append(i)
             if len(index) == occurrence:
                 break
@@ -193,15 +215,16 @@ def AvgLocation(earthquakes: list[dict], index: list):
     return avg_lat, avg_lon
 
 
-def PrintMostCommon(earthquakes: list[dict]):
+def PrintMostCommon(earthquakes: list[dict], mode):
     """
     This function prints and returns the
     combined result of the above two functions
+    :param mode: Mode of most common place.
     :param earthquakes: Data from earthquakes file
     :return: Tuple of processed results
     """
 
-    name, occurrence, index = PlaceOfMostEQs(earthquakes)
+    name, occurrence, index = PlaceOfMostEQs(earthquakes, mode=mode)
 
     avg_lat, avg_lon = AvgLocation(earthquakes, index)
 
@@ -219,13 +242,20 @@ def PrintMostCommon(earthquakes: list[dict]):
 
 
 class Plot:
-    """This class orchestrates the plotting functions"""
+    """
+    This class orchestrates the plotting functions
+    :param mode: Choose mode for most common place. Options include:
+        'e', for exact,
+        'c', for city,
+        'co', for country,
+        'cc', for city + country (`Default`),
+    """
 
-    def __init__(self, earthquakes_data, coast_data):
+    def __init__(self, earthquakes_data, coast_data, mode='cc'):
         self.earthquakes = earthquakes_data
         self.coast = coast_data
 
-        self.most_common = PrintMostCommon(self.earthquakes)
+        self.most_common = PrintMostCommon(self.earthquakes, mode=mode)
 
         SetTex()
 
