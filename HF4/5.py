@@ -16,6 +16,15 @@ def SetTex():
 
 
 def my_Taylor(func, x, n, x0=0):
+    """
+    This is an implementation of the Taylor approximation.
+    :param func: Input function
+    :param x: sympy Symbol
+    :param n: the order of the Taylor polynom
+    :param x0: the center point of the polynom, default 0.
+    :return: The Taylor polynom
+    """
+
     result = func.subs(x, x0)
     for i in range(1, n):
         result += sp.diff(func, x, i).subs(x, x0) * (x-x0)**i / sp.factorial(i)
@@ -28,14 +37,10 @@ def pade_approximation_function(series, m, n):
     """
     Returns the Padé approximation [m/n] in the form of a rational function
     with coefficients simplified as fractions.
-
-    Parameters:
-    series : list - Coefficients of the Taylor series (e.g., [1, 0, -1/2, 0, 1/24, ...] for cos(x))
-    m : int - Degree of the numerator
-    n : int - Degree of the denominator
-
-    Returns:
-    sympy.Expr - Rational function P(x)/Q(x) with simplified fractions
+    :param series: Coefficients of the Taylor series
+    :param m: Degree of the numerator
+    :param n: Degree of the denominator
+    :return: Rational function P(x)/Q(x) with simplified fractions
     """
     # Check that there are enough terms in the series
     if len(series) < m + n + 1:
@@ -87,6 +92,15 @@ def pade_approximation_function(series, m, n):
 
 
 def Pade_and_Taylor(func, x, m, n):
+    """
+    This function connects the Padé and Taylor functions,
+    so we can immediately get the Padé approximation of a function.
+    :param func: Input function
+    :param x: sympy Symbol
+    :param m: Degree of the numerator
+    :param n: Degree of the denominator
+    :return: The Padé approximation
+    """
 
     n_exponent = n+m + 1
     # Make the Taylor approximation
@@ -100,7 +114,14 @@ def Pade_and_Taylor(func, x, m, n):
     return pade_approx
 
 
+# ----------------------------------
+# Display
+# ----------------------------------
+
 def DisplayPadeTable():
+    """
+    This function displays the 3/3 Padé table of e^-x.
+    """
 
     x = sp.Symbol('x')
     func = sp.exp(-x)
@@ -112,12 +133,22 @@ def DisplayPadeTable():
     for m in range(max_order + 1):
         for n in range(max_order + 1):
             approx = Pade_and_Taylor(func, x, m, n)
-            # It didnt work with pd dataframes, so here is as rendered LaTeX
+            # It didn't work with pd dataframes, so here is as rendered LaTeX
             display(Math(f'[{m}/{n}] = ' + sp.latex(approx)))
         print("—" * 60)
 
 
+# ----------------------------------
+# Plot
+# ----------------------------------
+
 def plot_ln():
+    """
+    This function plots the ln(1+x)/x function,
+    Its 20th degree Taylor polynom, and
+    its Padé approximation.
+    """
+
     x = sp.Symbol('x')
 
     # First compute Taylor of ln(1+x)
